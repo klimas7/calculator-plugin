@@ -1,0 +1,14 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
+         xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
+         xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
+    <f:entry title="First">
+        <f:textbox name="first" value="${it.first}" readonly="true"/>
+    </f:entry>
+    <f:entry title="Second">
+        <f:textbox name="second" value="${it.second}" readonly="true"/>
+    </f:entry>
+    <f:entry title="Operation">
+        <f:textbox name="operation" value="${it.operation}.symbol" readonly="true"></f:textbox>
+    </f:entry>
+</j:jelly>

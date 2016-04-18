@@ -1,0 +1,24 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
+         xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <div name="parameter" description="${it.description}">
+        <input type="hidden" name="name" value="${it.name}"/>
+
+        <f:entry title="First">
+            <f:textbox name="first" default="0"
+                       checkUrl="'${it.rootUrl}/descriptor/pl.klimas7.calculatorPlugin.CalculatorParameterDefinition/validate?value='+encodeURIComponent(this.value)"/>
+        </f:entry>
+        <f:entry title="Second">
+            <f:textbox name="second" default="0"
+                       checkUrl="'${it.rootUrl}/descriptor/pl.klimas7.calculatorPlugin.CalculatorParameterDefinition/validate?value='+encodeURIComponent(this.value)"/>
+        </f:entry>
+
+        <f:entry title="Operation">
+            <select name="operation">
+                <j:forEach var="op" items="${it.operations}">
+                    <f:option value="${op}">${op.symbol}</f:option>
+                </j:forEach>
+            </select>
+        </f:entry>
+    </div>
+</j:jelly>

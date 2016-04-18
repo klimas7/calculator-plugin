@@ -9,6 +9,7 @@ import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractProject;
 import hudson.model.Descriptor;
+import hudson.model.ParametersAction;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
@@ -20,14 +21,23 @@ import org.kohsuke.stapler.StaplerRequest;
 
 public class CalculatorBuilder extends Builder implements SimpleBuildStep {
 
+    private final String parameterName;
+
     @DataBoundConstructor
-    public CalculatorBuilder(){
+    public CalculatorBuilder(String parameterName){
+        this.parameterName = parameterName;
     }
 
     @Override
     public void perform(@Nonnull Run<?, ?> run, @Nonnull FilePath workspace, @Nonnull Launcher launcher, @Nonnull TaskListener listener) throws InterruptedException, IOException {
         listener.getLogger().println("Numerical system is: " + getDescriptor().getNumericalSystem());
         listener.getLogger().println("Calculation result:");
+
+        run.getAction(ParametersAction.class).getParameter(parameterName);
+    }
+
+    public String getParameterName() {
+        return parameterName;
     }
 
     @Override
