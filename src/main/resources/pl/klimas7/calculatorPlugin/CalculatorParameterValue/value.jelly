@@ -9,6 +9,6 @@
         <f:textbox name="second" value="${it.second}" readonly="true"/>
     </f:entry>
     <f:entry title="Operation">
-        <f:textbox name="operation" value="${it.operation}.symbol" readonly="true"></f:textbox>
+        <f:textbox name="operation" value="${it.operation.symbol}" readonly="true"></f:textbox>
     </f:entry>
 </j:jelly>
