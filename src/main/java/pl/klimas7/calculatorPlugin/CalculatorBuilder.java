@@ -2,6 +2,8 @@ package pl.klimas7.calculatorPlugin;
 
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.annotation.Nonnull;
 
 import hudson.Extension;
@@ -24,16 +26,46 @@ public class CalculatorBuilder extends Builder implements SimpleBuildStep {
     private final String parameterName;
 
     @DataBoundConstructor
-    public CalculatorBuilder(String parameterName){
+    public CalculatorBuilder(String parameterName) {
         this.parameterName = parameterName;
     }
 
     @Override
     public void perform(@Nonnull Run<?, ?> run, @Nonnull FilePath workspace, @Nonnull Launcher launcher, @Nonnull TaskListener listener) throws InterruptedException, IOException {
-        listener.getLogger().println("Numerical system is: " + getDescriptor().getNumericalSystem());
-        listener.getLogger().println("Calculation result:");
 
-        run.getAction(ParametersAction.class).getParameter(parameterName);
+        NumericalSystem numericalSystem = getDescriptor().getNumericalSystem();
+        CalculatorParameterValue calculatorParameterValue = (CalculatorParameterValue) run.getAction(ParametersAction.class).getParameter(parameterName);
+        BigInteger first = new BigInteger(calculatorParameterValue.getFirst());
+        BigInteger second = new BigInteger(calculatorParameterValue.getSecond());
+        Operation operation = calculatorParameterValue.getOperation();
+
+        String answer = "nan";
+        if (operation != Operation.DIV || second.intValue() != 0) {
+            answer = calculate(first, second, operation, numericalSystem);
+        }
+
+        listener.getLogger().println("Numerical system is: " + numericalSystem);
+        listener.getLogger().println("Calculation result:");
+        listener.getLogger().println(first + " " + operation.getSymbol() + " " + second + " = " + answer);
+    }
+
+    private String calculate(BigInteger first, BigInteger second, Operation operation, NumericalSystem numericalSystem) {
+        BigInteger answer = null;
+        switch (operation) {
+            case ADD:
+                answer = first.add(second);
+                break;
+            case SUB:
+                answer = first.subtract(second);
+                break;
+            case MUL:
+                answer = first.multiply(second);
+                break;
+            case DIV:
+                answer = first.divide(second);
+        }
+
+        return answer.toString(numericalSystem.getBase());
     }
 
     public String getParameterName() {
@@ -42,7 +74,7 @@ public class CalculatorBuilder extends Builder implements SimpleBuildStep {
 
     @Override
     public DescriptorImpl getDescriptor() {
-        return (DescriptorImpl)super.getDescriptor();
+        return (DescriptorImpl) super.getDescriptor();
     }
 
     @Extension // This indicates to Jenkins that this is an implementation of an extension point.
@@ -67,7 +99,6 @@ public class CalculatorBuilder extends Builder implements SimpleBuildStep {
 
         @Override
         public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
-
             numericalSystem = NumericalSystem.valueOf((String) json.get("numericalSystem"));
             save();
             return super.configure(req, json);
