@@ -12,6 +12,7 @@ import hudson.Launcher;
 import hudson.model.AbstractProject;
 import hudson.model.Descriptor;
 import hudson.model.ParametersAction;
+import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
@@ -35,6 +36,11 @@ public class CalculatorBuilder extends Builder implements SimpleBuildStep {
 
         NumericalSystem numericalSystem = getDescriptor().getNumericalSystem();
         CalculatorParameterValue calculatorParameterValue = (CalculatorParameterValue) run.getAction(ParametersAction.class).getParameter(parameterName);
+        if (calculatorParameterValue == null) {
+            listener.fatalError("Bad parameter name: " + parameterName);
+            run.setResult(Result.FAILURE);
+            return;
+        }
         BigInteger first = new BigInteger(calculatorParameterValue.getFirst());
         BigInteger second = new BigInteger(calculatorParameterValue.getSecond());
         Operation operation = calculatorParameterValue.getOperation();
