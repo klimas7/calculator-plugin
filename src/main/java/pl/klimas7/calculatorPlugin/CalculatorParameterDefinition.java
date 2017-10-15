@@ -21,15 +21,16 @@ public class CalculatorParameterDefinition extends ParameterDefinition {
 
     @Override
     public ParameterValue createValue(StaplerRequest req, JSONObject jo) {
-        CalculatorParameterValue calculatorParameterValue = new CalculatorParameterValue(getName(), getDescription());
-        calculatorParameterValue.setFirst(req.getParameter("first"));
-        calculatorParameterValue.setSecond(req.getParameter("second"));
-        calculatorParameterValue.setOperation(Operation.valueOf(req.getParameter("operation")));
+        String name = getName();
+        CalculatorParameterValue calculatorParameterValue = new CalculatorParameterValue(name, getDescription());
+        calculatorParameterValue.setFirst(req.getParameter(name + "_first"));
+        calculatorParameterValue.setSecond(req.getParameter(name + "_second"));
+        calculatorParameterValue.setOperation(Operation.valueOf(req.getParameter(name + "_operation")));
         return calculatorParameterValue;
     }
 
     @Override
-    public ParameterValue createValue(StaplerRequest req ) {
+    public ParameterValue createValue(StaplerRequest req) {
         CalculatorParameterValue calculatorParameterValue = new CalculatorParameterValue(getName(), getDescription(), "0", "0", Operation.ADD);
         return calculatorParameterValue;
     }
