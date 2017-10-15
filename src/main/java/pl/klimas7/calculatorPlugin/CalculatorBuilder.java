@@ -86,7 +86,7 @@ public class CalculatorBuilder extends Builder implements SimpleBuildStep {
     @Extension // This indicates to Jenkins that this is an implementation of an extension point.
     public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
-        private NumericalSystem numericalSystem;
+        private NumericalSystem numericalSystem = NumericalSystem.HEX;
 
         public DescriptorImpl() {
             load();
