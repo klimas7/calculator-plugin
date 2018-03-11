@@ -7,6 +7,7 @@ import hudson.Extension;
 import hudson.model.ParameterDefinition;
 import hudson.model.ParameterValue;
 import hudson.util.FormValidation;
+import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
@@ -40,13 +41,17 @@ public class CalculatorParameterDefinition extends ParameterDefinition {
         return Operation.values();
     }
 
+    public String getRootUrl() {
+        return Jenkins.getInstance().getRootUrl();
+    }
+
     @Override
     public DescriptorImpl getDescriptor() {
         return (DescriptorImpl) super.getDescriptor();
     }
 
     @Extension
-    public static final class DescriptorImpl extends ParameterDescriptor {
+        public static final class DescriptorImpl extends ParameterDescriptor {
 
         @Override
         public String getDisplayName() {
@@ -67,6 +72,5 @@ public class CalculatorParameterDefinition extends ParameterDefinition {
                 return FormValidation.error("Unexpected error: " + pse.getDescription());
             }
         }
-
     }
 }
